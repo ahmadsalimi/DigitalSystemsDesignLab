@@ -22,7 +22,7 @@ initial begin
     #20 sensor = 8'd33;
     #20 sensor = -8'd5;
     #20 sensor = 8'd46;
-    #20 $stop;
+    #100 $stop;
 end
 
 always
