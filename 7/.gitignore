@@ -151,7 +151,6 @@ sim_out.bin
 !*.cmp
 !*.qip
 !*.vwf
-!*.mpf
 ## tbd
 
 !*.tcl
