@@ -16,6 +16,6 @@ reg `complex    mem [DEPTH-1:0];
 
 assign rdata1 = mem[raddr1];
 assign rdata2 = mem[raddr2];
-always @(waddr) mem[waddr] <= wdata;
+always @(*) mem[waddr] <= wdata;
 
 endmodule
