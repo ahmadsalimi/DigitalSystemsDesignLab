@@ -28,7 +28,7 @@ integer j, k;
 always @(posedge clk or negedge rstN) begin
     if (~rstN) begin
         for (j = 0; j < 16; j = j + 1)
-            mem[j]  = {16'b0};
+            mem[j]  = 0;
         search_res = 0;
     end
     else if (we)
