@@ -1,21 +1,21 @@
 module stack_machine (
     input           clk,
     input           rstN,
-    input   [8:1]   in,
-    output  [8:1]   out,
+    input   [7:0]   in,
+    output  [7:0]   out,
     output          error
 );
 
-reg     [8:1]   data_mem    [255:0];
-reg     [8:1]   stack       [7:0]
+reg     [7:0]   data_mem    [255:0];
+reg     [7:0]   stack       [7:0]
 reg     [1:12]  inst_mem    [31:0];
 
-reg     [5:1]   pc;
-reg     [3:1]   sp;
+reg     [4:0]   pc;
+reg     [2:0]   sp;
 
 reg             s_flag = 0, z_flag = 0;
-wire    [4:1]   inst_op;
-wire    [8:1]   inst_value;
+wire    [3:0]   inst_op;
+wire    [7:0]   inst_value;
 
 
 localparam op_pushc     = 0;
@@ -31,10 +31,10 @@ localparam err_addr     = 253;
 localparam in_addr      = 254;
 localparam out_addr     = 255;
 
-assign temp_error       = (out > 127) || (in[7] == 1);
 assign inst_op          = inst_mem[pc][1:4];
 assign inst_value       = inst_mem[pc][5:12];
 assign out              = memory[out_addr];
+assign error            = memory[err_addr][0];
 
 
 integer i;
@@ -49,7 +49,7 @@ always @(posedge clk or negedge rstN) begin
     end
     else begin
         data_mem[in_addr]               <= in;
-        data_mem[err_addr]              <= temp_error;
+        data_mem[err_addr]              <= (out > 127) || (in[7] == 1);
 
         pc                              <= pc + 1;
         case (inst_op)
