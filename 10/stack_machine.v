@@ -82,19 +82,15 @@ always @(posedge clk or negedge rstN) begin
 
 
             /* JUMP Z */
-            op_jz: begin
-                if (z_flag) begin
-                    pc                  <= stack[sp - 1];
-                    sp                  <= sp - 1;
-                end
+            op_jz: if (z_flag) begin
+                pc                      <= stack[sp - 1];
+                sp                      <= sp - 1;
             end
 
             /* JUMP S */
-            op_js: begin
-                if (s_flag) begin
-                    pc                  <= stack[sp - 1];
-                    sp                  <= sp - 1;
-                end
+            op_js: if (s_flag) begin
+                pc                      <= stack[sp - 1];
+                sp                      <= sp - 1;
             end
 
             /* ADD */
