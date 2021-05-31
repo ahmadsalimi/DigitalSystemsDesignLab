@@ -16,6 +16,7 @@ reg     [2:0]   sp;
 reg             s_flag = 0, z_flag = 0;
 wire    [3:0]   inst_op;
 wire    [7:0]   inst_value;
+wire    [7:0]   add_result, sub_result;
 
 
 localparam op_pushc     = 0;
@@ -35,6 +36,8 @@ assign inst_op          = inst_mem[pc][1:4];
 assign inst_value       = inst_mem[pc][5:12];
 assign out              = memory[out_addr];
 assign error            = memory[err_addr][0];
+assign add_result       = stack[sp - 2] + stack[sp - 1];
+assign sub_result       = stack[sp - 2] - stack[sp - 1];
 
 
 integer i;
@@ -96,18 +99,18 @@ always @(posedge clk or negedge rstN) begin
 
             /* ADD */
             op_add: begin
-                stack[sp - 2]           <= stack[sp - 2] + stack[sp - 1];
+                stack[sp - 2]           <= add_result;
                 sp                      <= sp - 1;
-                z_flag                  <= ~|(stack[sp - 2] + stack[sp - 1]);
-                s_flag                  <= $signed(stack[sp - 2] + stack[sp - 1]) < 0;
+                z_flag                  <= ~|add_result;
+                s_flag                  <= $signed(add_result) < 0;
             end
 
             /* SUB */
             op_sub: begin
-                stack[sp - 2]           <= stack[sp - 2] - stack[sp - 1];
+                stack[sp - 2]           <= sub_result;
                 sp                      <= sp - 1;
-                z_flag                  <= ~|(stack[sp - 2] - stack[sp - 1]);
-                s_flag                  <= $signed(stack[sp - 2] - stack[sp - 1]) < 0;
+                z_flag                  <= ~|sub_result;
+                s_flag                  <= $signed(sub_result) < 0;
             end
         endcase
     end
