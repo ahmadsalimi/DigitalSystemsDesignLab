@@ -2,12 +2,11 @@ module stack_machine (
     input           clk,
     input           rstN,
     input   [7:0]   in,
-    output  [7:0]   out,
-    output          error
+    output  [7:0]   out
 );
 
 reg     [7:0]   data_mem    [255:0];
-reg     [7:0]   stack       [7:0]
+reg     [7:0]   stack       [7:0];
 reg     [1:12]  inst_mem    [31:0];
 
 reg     [4:0]   pc;
@@ -19,23 +18,21 @@ wire    [7:0]   inst_value;
 wire    [7:0]   add_result, sub_result;
 
 
-localparam op_pushc     = 0;
-localparam op_pushmem   = 1;
-localparam op_pop       = 2;
-localparam op_j         = 3;
-localparam op_jz        = 4;
-localparam op_js        = 5;
-localparam op_add       = 6;
-localparam op_sub       = 7;
+parameter op_pushc      = 0;
+parameter op_pushmem    = 1;
+parameter op_pop        = 2;
+parameter op_j          = 3;
+parameter op_jz         = 4;
+parameter op_js         = 5;
+parameter op_add        = 6;
+parameter op_sub        = 7;
 
-localparam err_addr     = 253;
-localparam in_addr      = 254;
-localparam out_addr     = 255;
+parameter in_addr       = 254;
+parameter out_addr      = 255;
 
 assign inst_op          = inst_mem[pc][1:4];
 assign inst_value       = inst_mem[pc][5:12];
-assign out              = memory[out_addr];
-assign error            = memory[err_addr][0];
+assign out              = data_mem[out_addr];
 assign add_result       = stack[sp - 2] + stack[sp - 1];
 assign sub_result       = stack[sp - 2] - stack[sp - 1];
 
@@ -52,7 +49,6 @@ always @(posedge clk or negedge rstN) begin
     end
     else begin
         data_mem[in_addr]               <= in;
-        data_mem[err_addr]              <= (out > 127) || (in[7] == 1);
 
         pc                              <= pc + 1;
         case (inst_op)
