@@ -155,6 +155,7 @@ sim_out.bin
 !data
 !images
 !*.tcl
+!*.pdf
 
 
 # End of https://www.toptal.com/developers/gitignore/api/modelsim,xilinxiseع
